@@ -3,9 +3,14 @@ import React, { useState } from 'react';
 function App() {
   const [url, setUrl] = useState('');
   const [selectedPlan, setSelectedPlan] = useState('Standart');
+  const [subtitleStyle, setSubtitleStyle] = useState('Modern (Kuning/Hitam)');
+  const [hookStyle, setHookStyle] = useState('Emosional / Pertanyaan');
+  const [clipDuration, setClipDuration] = useState('30 Detik');
+  
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [clips, setClips] = useState([]);
+  
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const [receiptFile, setReceiptFile] = useState(null);
@@ -29,12 +34,11 @@ function App() {
 
     setTimeout(() => {
       setLoading(false);
-      setSuccessMsg('Video berhasil dianalisis oleh AI! Silakan pilih paket dan lakukan pembayaran untuk mengunduh klip.');
-      // Simulasi hasil klip video yang dihasilkan AI
+      setSuccessMsg(`AI berhasil memotong video menggunakan Hook "${hookStyle}" & Subtitle "${subtitleStyle}"!`);
       setClips([
-        { id: 1, title: 'Klip Viral 1: Poin Utama (00:15 - 00:45)', duration: '30s' },
-        { id: 2, title: 'Klip Viral 2: Momen Menarik (01:20 - 02:00)', duration: '40s' },
-        { id: 3, title: 'Klip Viral 3: Kesimpulan (03:10 - 03:50)', duration: '40s' }
+        { id: 1, title: 'Klip 1: Poin Utama & Hook Kuat', duration: clipDuration },
+        { id: 2, title: 'Klip 2: Pembahasan Menarik', duration: clipDuration },
+        { id: 3, title: 'Klip 3: Kesimpulan & Call to Action', duration: clipDuration }
       ]);
     }, 2000);
   };
@@ -56,9 +60,9 @@ function App() {
         <header className="flex justify-between items-center mb-10">
           <div>
             <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-              AI Video Clipper SaaS
+              AI Video Clipper SaaS Pro
             </h1>
-            <p className="text-gray-400 text-sm mt-1">Ubah video panjang YouTube jadi klip viral otomatis.</p>
+            <p className="text-gray-400 text-sm mt-1">Platform Otomasi Klip Viral dengan Kustomisasi AI.</p>
           </div>
           <button 
             onClick={() => setIsAdminOpen(!isAdminOpen)}
@@ -83,7 +87,7 @@ function App() {
               />
               {adminEmail === 'tawitan144@gmail.com' ? (
                 <div className="p-3 bg-purple-950/40 border border-purple-800 rounded-lg text-xs text-purple-300">
-                  ✅ Akses Admin Diterima! Daftar pengguna yang mengunggah struk BCA akan muncul di sini.
+                  ✅ Akses Admin Diterima! Daftar pengguna yang mengunggah struk BCA aktif.
                 </div>
               ) : (
                 <p className="text-xs text-gray-500">Masukkan email yang benar untuk membuka panel kontrol.</p>
@@ -92,8 +96,8 @@ function App() {
           </div>
         )}
 
-        {/* Input URL Section */}
-        <div className="bg-gray-900/80 border border-gray-800 p-6 rounded-2xl shadow-xl backdrop-blur-md mb-8">
+        {/* Input URL & Tool Clipper Lengkap */}
+        <div className="bg-gray-900/80 border border-gray-800 p-6 rounded-2xl shadow-xl backdrop-blur-md mb-8 space-y-4">
           <form onSubmit={handleProcess} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Link Video YouTube</label>
@@ -105,30 +109,92 @@ function App() {
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none text-white text-sm"
               />
             </div>
+
+            {/* Pilihan Tool Clipper & Kustomisasi AI */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Pilih Gaya Hook</label>
+                <select 
+                  value={hookStyle} 
+                  onChange={(e) => setHookStyle(e.target.value)}
+                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
+                >
+                  <option>Emosional / Pertanyaan</option>
+                  <option>Fakta Mengejutkan</option>
+                  <option>Kontroversial / Debat</option>
+                  <option>Edukasi Langsung</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Gaya Subtitle AI</label>
+                <select 
+                  value={subtitleStyle} 
+                  onChange={(e) => setSubtitleStyle(e.target.value)}
+                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
+                >
+                  <option>Modern (Kuning/Hitam - Alex Hormozi)</option>
+                  <option>Minimalis Clean (Putih)</option>
+                  <option>Neon Glow (Ungu/Pink)</option>
+                  <option>Netflix Style</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Durasi Target Klip</label>
+                <select 
+                  value={clipDuration} 
+                  onChange={(e) => setClipDuration(e.target.value)}
+                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
+                >
+                  <option>30 Detik (Shorts/Reels)</option>
+                  <option>60 Detik (TikTok/IG)</option>
+                  <option>90 Detik (Deep Dive)</option>
+                </select>
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200 text-sm"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200 text-sm mt-4"
             >
-              {loading ? 'AI Sedang Memotong Video...' : 'Mulai Potong Video (AI)'}
+              {loading ? 'AI Sedang Menganalisis & Meracik Klip...' : '🚀 Mulai Potong Video dengan AI'}
             </button>
           </form>
-          {successMsg && <p className="mt-4 text-green-400 text-center text-sm font-medium">{successMsg}</p>}
+          {successMsg && <p className="mt-2 text-green-400 text-center text-xs font-medium">{successMsg}</p>}
         </div>
 
-        {/* Hasil Klip AI (Akan muncul setelah diproses) */}
+        {/* Hasil Klip & Pemutar Video (Video Player Preview) */}
         {clips.length > 0 && (
-          <div className="bg-gray-900 border border-purple-500/40 p-6 rounded-2xl mb-8 shadow-xl">
-            <h3 className="text-lg font-bold text-purple-400 mb-4">🎬 Hasil Klip AI (Siap Unduh)</h3>
+          <div className="bg-gray-900 border border-purple-500/40 p-6 rounded-2xl mb-8 shadow-xl space-y-6">
+            <h3 className="text-lg font-bold text-purple-400">🎬 Hasil Klip AI & Pemutar Pratinjau</h3>
+            
+            {/* Simulasi Video Player dengan Subtitle & Hook */}
+            <div className="relative w-full aspect-[9/16] md:aspect-video bg-black rounded-xl overflow-hidden border border-gray-800 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 flex flex-col justify-between p-4">
+                <span className="bg-purple-600/80 text-white text-[10px] px-2.5 py-1 rounded-full w-max font-bold">
+                  Hook: {hookStyle}
+                </span>
+                <div className="text-center mb-6">
+                  <span className="bg-black/70 text-yellow-300 px-3 py-1.5 rounded-lg text-sm md:text-lg font-extrabold tracking-wide shadow-lg border border-yellow-500/30">
+                    ✨ [Teks Subtitle Bergaya "{subtitleStyle}"]
+                  </span>
+                </div>
+              </div>
+              <p className="text-gray-500 text-xs">Pratinjau Video Vertikal / Horisontal AI Clipper</p>
+            </div>
+
+            {/* Daftar Klip Siap Unduh */}
             <div className="space-y-3">
               {clips.map((clip) => (
                 <div key={clip.id} className="flex justify-between items-center bg-gray-800/80 p-4 rounded-xl border border-gray-700">
                   <div>
                     <h4 className="text-sm font-semibold text-white">{clip.title}</h4>
-                    <p className="text-xs text-gray-400">Durasi: {clip.duration}</p>
+                    <p className="text-xs text-gray-400">Durasi: {clip.duration} • Subtitle & Hook Diterapkan</p>
                   </div>
                   <button 
-                    onClick={() => alert('Silakan selesaikan pembayaran paket terlebih dahulu untuk mengunduh klip tanpa watermark!')}
+                    onClick={() => alert('Selesaikan pembayaran paket di bawah untuk mengunduh seluruh klip tanpa watermark!')}
                     className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-xs font-bold rounded-lg transition"
                   >
                     Unduh Klip
