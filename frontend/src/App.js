@@ -10,10 +10,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [clips, setClips] = useState([]);
   
-  // State untuk Preview Video Langsung di Kolom Pilihan Klip
-  const [activePreviewClip, setActivePreviewClip] = useState(null);
-
-  // State Studio Editor & Ratusan Pilihan Templat
   const [editingClip, setEditingClip] = useState(null);
   const [hookText, setHookText] = useState('RAHASIA KONTEN VIRAL OTOMATIS!');
   const [searchTemplate, setSearchTemplate] = useState('');
@@ -23,7 +19,6 @@ function App() {
   const [selectedFrameStyle, setSelectedFrameStyle] = useState('Cinematic Blur Background (#12)');
   const [targetLang, setTargetLang] = useState('Indonesia');
 
-  // State Admin
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const isAdminLoggedIn = adminEmail.trim().toLowerCase() === 'tawitan144@gmail.com';
@@ -47,7 +42,7 @@ function App() {
 
   const hookTemplatesList = [
     { id: 1, name: 'Banner Merah Menyala (Viral #01)' },
-    { id: 2, name: 'Kuning TokTok Pop-Up (#02)' },
+    { id: 2, name: 'Kuning TikTok Pop-Up (#02)' },
     { id: 3, name: 'Neon Cyberpunk Ungu (#03)' },
     { id: 4, name: 'Minimalis Putih Elegan (#04)' },
   ];
@@ -84,7 +79,6 @@ function App() {
     setLoading(true);
     setClips([]);
     setEditingClip(null);
-    setActivePreviewClip(null);
 
     setTimeout(() => {
       setLoading(false);
@@ -96,18 +90,13 @@ function App() {
         { id: 4, title: 'Klip #4: Penutup & Call to Action', start: 190, end: 225, duration: '35 Detik', score: '91% Viral' }
       ];
       setClips(generatedClips);
-      setActivePreviewClip(generatedClips[0]); // Set default preview ke klip pertama
+      setEditingClip(generatedClips[0]);
     }, 1500);
-  };
-
-  const openEditor = (clip) => {
-    setEditingClip(clip);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDownloadClip = (clipTitle, startSec, endSec) => {
     if (isAdminLoggedIn) {
-      alert(`✅ ADMIN (THANTHAWI): Mengunduh "${clipTitle}" secara gratis!`);
+      alert(`✅ ADMIN (THANTHAWI): Mengunduh "${clipTitle}" dengan 500+ Templat Aktif secara gratis!`);
       window.open(`https://www.youtube.com/watch?v=${videoId}&t=${startSec}s`, '_blank');
     } else {
       alert('Selesaikan pembayaran paket terlebih dahulu (Transfer BCA: 753-609-2721 a.n. THANTHAWI) untuk membuka akses unduh tanpa watermark!');
@@ -138,7 +127,7 @@ function App() {
 
           <nav className="space-y-1.5 flex md:block overflow-x-auto space-x-2 md:space-x-0">
             {[
-              { id: 'beranda', label: 'Beranda & 500+ Templat', icon: '🎨' },
+              { id: 'beranda', label: 'Studio & Nonton Klip', icon: '🎬' },
               { id: 'harga', label: 'Harga & Paket', icon: '💎' },
               { id: 'admin', label: 'Panel Admin', icon: '🔑' },
             ].map((menu) => (
@@ -146,7 +135,6 @@ function App() {
                 key={menu.id}
                 onClick={() => {
                   setActiveMenu(menu.id);
-                  setEditingClip(null);
                   if (menu.id === 'admin') setIsAdminOpen(true);
                 }}
                 className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
@@ -175,11 +163,9 @@ function App() {
         <div className="flex justify-between items-center mb-6 bg-[#111614] border border-zinc-800/80 px-6 py-4 rounded-2xl">
           <div>
             <h1 className="text-base md:text-lg font-bold text-zinc-200">
-              {editingClip ? `Studio Editor: ${editingClip.title}` : 'Sistem 500+ Templat & Klip AI'}
+              {editingClip ? `Nonton & Edit: ${editingClip.title}` : 'Studio Pemotong & Pemutar Klip AI'}
             </h1>
-            <p className="text-xs text-zinc-400">
-              {editingClip ? 'Kustomisasi hook, subtitle, dan bingkai dari ratusan koleksi templat.' : 'Tonton langsung klip pilihan Anda dan edit dengan mudah.'}
-            </p>
+            <p className="text-xs text-zinc-400">Pilih klip di bawah untuk langsung memutarnya secara live sambil mengedit templat.</p>
           </div>
           <button 
             onClick={() => setIsAdminOpen(!isAdminOpen)}
@@ -206,97 +192,249 @@ function App() {
               className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white mb-2"
             />
             {isAdminLoggedIn && (
-              <p className="text-xs text-emerald-400 font-medium">✅ Mode Admin Aktif! Bebas unduh semua hasil editan klip tanpa batas.</p>
+              <p className="text-xs text-emerald-400 font-medium">✅ Mode Admin Aktif! Bebas unduh semua hasil klip tanpa batas.</p>
             )}
           </div>
         )}
 
-        {/* ========================================================= */}
-        {/* STUDIO EDITOR                                             */}
-        {/* ========================================================= */}
-        {editingClip ? (
-          <div className="bg-[#111614] border border-emerald-500/40 p-6 rounded-3xl shadow-2xl space-y-6">
-            <div className="flex justify-between items-center border-b border-zinc-800 pb-4">
-              <button 
-                onClick={() => setEditingClip(null)}
-                className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-xs font-bold rounded-xl transition flex items-center gap-2"
-              >
-                ← Kembali ke Daftar Klip
-              </button>
-              <button 
-                onClick={() => handleDownloadClip(editingClip.title, editingClip.start, editingClip.end)}
-                className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-xl transition shadow-lg"
-              >
-                {isAdminLoggedIn ? '⬇️ Export & Unduh Video (Gratis Admin)' : '🔒 Export & Unduh Video'}
-              </button>
+        {/* Input URL Section */}
+        <div className="bg-gradient-to-br from-[#121815] via-[#111614] to-[#0d1210] border border-zinc-800 p-6 md:p-8 rounded-3xl shadow-2xl mb-8">
+          <span className="bg-emerald-500/10 text-emerald-400 text-[11px] px-3 py-1 rounded-full font-bold border border-emerald-500/20 inline-block mb-3">
+            ⚡ {selectedTool}
+          </span>
+          <h2 className="text-xl md:text-3xl font-black tracking-tight mb-2 text-white">Tempel tautan YouTube & tonton klip secara instan.</h2>
+          <p className="text-xs md:text-sm text-zinc-400 mb-6">AI memotong video menjadi beberapa pilihan klip yang bisa Anda tonton dan edit langsung.</p>
+
+          <form onSubmit={handleProcess} className="bg-[#080c0a] border border-zinc-700/80 p-2 rounded-2xl flex flex-col md:flex-row items-center gap-2 shadow-xl">
+            <input
+              type="text"
+              placeholder="Tempel tautan video YouTube (contoh: https://youtu.be/...)"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="w-full px-4 py-3 bg-transparent focus:outline-none text-xs md:text-sm text-white placeholder-zinc-500"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full md:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-400 font-extrabold text-black rounded-xl transition text-xs whitespace-nowrap"
+            >
+              {loading ? 'Memproses AI...' : 'Proses & Tonton Klip →'}
+            </button>
+          </form>
+        </div>
+
+        {/* STUDIO UTAMA */}
+        {videoId && clips.length > 0 && (
+          <div className="space-y-6">
+            
+            <div className="bg-[#111614] border border-zinc-800 p-5 rounded-2xl shadow-xl">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">
+                🎬 Daftar Pilihan Klip (Klik untuk Nonton & Edit Langsung):
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {clips.map((clip) => (
+                  <button
+                    key={clip.id}
+                    onClick={() => setEditingClip(clip)}
+                    className={`p-3.5 rounded-xl border text-left transition flex flex-col justify-between ${
+                      editingClip && editingClip.id === clip.id 
+                        ? 'bg-emerald-500/20 border-emerald-500 text-white shadow-lg' 
+                        : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-white'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-[10px] font-bold text-emerald-400">{clip.score}</span>
+                        <span className="text-[10px] text-zinc-500">{clip.duration}</span>
+                      </div>
+                      <h4 className="text-xs font-bold truncate">{clip.title}</h4>
+                    </div>
+                    <span className="text-[10px] mt-2 underline text-emerald-300 font-semibold">▶ Sedang Dipilih</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              
-              <div className="lg:col-span-5 flex flex-col items-center">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-3">Live Preview (Templat Aktif)</span>
+            {editingClip && (
+              <div className="bg-[#111614] border border-emerald-500/40 p-6 rounded-3xl shadow-2xl space-y-6">
                 
-                <div className="relative w-full max-w-[300px] aspect-[9/16] bg-black rounded-3xl overflow-hidden border-4 border-zinc-800 shadow-2xl flex flex-col justify-between">
-                  <iframe
-                    className="absolute inset-0 w-full h-full object-cover scale-150 pointer-events-auto"
-                    src={`https://www.youtube.com/embed/${videoId}?start=${editingClip.start}&end=${editingClip.end}&autoplay=1&mute=0&loop=1`}
-                    title="Clip Preview"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  ></iframe>
-
-                  <div className="relative z-10 p-4 pt-6 text-center pointer-events-none">
-                    <span className="inline-block px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide bg-red-600 text-white shadow-lg">
-                      {hookText}
-                    </span>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-zinc-800 pb-4 gap-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-emerald-400">Sedang Memutar: {editingClip.title}</h3>
+                    <p className="text-xs text-zinc-400">Potongan Durasi: Detik ke-{editingClip.start} s/d {editingClip.end}</p>
                   </div>
-
-                  <div className="relative z-10 p-4 pb-10 text-center pointer-events-none bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                    <span className="inline-block px-3 py-1.5 rounded-lg text-xs font-extrabold text-yellow-300 bg-black/75 uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
-                      {translatedSubtitles[targetLang]}
-                    </span>
-                    <p className="text-[9px] text-emerald-400 mt-1.5">Bahasa: {targetLang} • Templat: Aktif</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="lg:col-span-7 space-y-5 bg-[#080c0a] p-6 rounded-2xl border border-zinc-800">
-                <h3 className="text-sm font-bold text-emerald-400 border-b border-zinc-800 pb-3">🎨 Perpustakaan 500+ Templat & Gaya Tulisan</h3>
-
-                <div>
-                  <label className="block text-xs font-bold text-zinc-300 mb-1">Cari Cepat Templat / Gaya:</label>
-                  <input 
-                    type="text" 
-                    placeholder="Ketik nama templat (cth: Hormozi, Neon, Cinematic)..."
-                    value={searchTemplate}
-                    onChange={(e) => setSearchTemplate(e.target.value)}
-                    className="w-full p-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-zinc-300">1. Pilih Templat Gaya Hook</label>
-                  <select 
-                    value={selectedHookTemplate}
-                    onChange={(e) => setSelectedHookTemplate(e.target.value)}
-                    className="w-full p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:border-emerald-500 focus:outline-none"
+                  <button 
+                    onClick={() => handleDownloadClip(editingClip.title, editingClip.start, editingClip.end)}
+                    className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-xl transition shadow-lg"
                   >
-                    {hookTemplatesList.map((h) => (
-                      <option key={h.id} value={h.name}>{h.name}</option>
-                    ))}
-                  </select>
-                  <input 
-                    type="text" 
-                    value={hookText}
-                    onChange={(e) => setHookText(e.target.value)}
-                    placeholder="Ubah Teks Hook..."
-                    className="w-full p-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
-                  />
+                    {isAdminLoggedIn ? '⬇️ Unduh Video Ini (Gratis Admin)' : '🔒 Unduh Video Ini'}
+                  </button>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-zinc-300">2. Pilih Gaya Subtitle Otomatis</label>
-                  <select 
-                    value={selectedSubtitleStyle}
-                    onChange={(e) => setSelectedSubtitleStyle(e.target.value)}
-                    className
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  
+                  <div className="lg:col-span-5 flex flex-col items-center">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-3">Live Video Player (Aktif Nonton)</span>
+                    
+                    <div className="relative w-full max-w-[300px] aspect-[9/16] bg-black rounded-3xl overflow-hidden border-4 border-zinc-800 shadow-2xl flex flex-col justify-between">
+                      <iframe
+                        className="absolute inset-0 w-full h-full object-cover scale-150 pointer-events-auto"
+                        src={`https://www.youtube.com/embed/${videoId}?start=${editingClip.start}&end=${editingClip.end}&autoplay=1&mute=0&loop=1`}
+                        title="Live Clip Player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      ></iframe>
+
+                      <div className="relative z-10 p-4 pt-6 text-center pointer-events-none">
+                        <span className="inline-block px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wide bg-red-600 text-white shadow-lg">
+                          {hookText}
+                        </span>
+                      </div>
+
+                      <div className="relative z-10 p-4 pb-10 text-center pointer-events-none bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                        <span className="inline-block px-3 py-1.5 rounded-lg text-xs font-extrabold text-yellow-300 bg-black/75 uppercase drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
+                          {translatedSubtitles[targetLang]}
+                        </span>
+                        <p className="text-[9px] text-emerald-400 mt-1.5">Bahasa: {targetLang} • Templat: Aktif</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-7 space-y-5 bg-[#080c0a] p-6 rounded-2xl border border-zinc-800">
+                    <h3 className="text-sm font-bold text-emerald-400 border-b border-zinc-800 pb-3">🎨 Pengaturan Templat & Gaya Tulisan</h3>
+
+                    <div>
+                      <label className="block text-xs font-bold text-zinc-300 mb-1">Cari Templat (500+ Opsi):</label>
+                      <input 
+                        type="text" 
+                        placeholder="Ketik nama gaya..."
+                        value={searchTemplate}
+                        onChange={(e) => setSearchTemplate(e.target.value)}
+                        className="w-full p-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:border-emerald-500 focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-zinc-300">1. Templat Gaya Hook</label>
+                      <select 
+                        value={selectedHookTemplate}
+                        onChange={(e) => setSelectedHookTemplate(e.target.value)}
+                        className="w-full p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                      >
+                        {hookTemplatesList.map((h) => (
+                          <option key={h.id} value={h.name}>{h.name}</option>
+                        ))}
+                      </select>
+                      <input 
+                        type="text" 
+                        value={hookText}
+                        onChange={(e) => setHookText(e.target.value)}
+                        placeholder="Ubah Teks Hook..."
+                        className="w-full p-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-zinc-300">2. Gaya Subtitle Otomatis</label>
+                      <select 
+                        value={selectedSubtitleStyle}
+                        onChange={(e) => setSelectedSubtitleStyle(e.target.value)}
+                        className="w-full p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                      >
+                        {subtitleStylesList.map((s) => (
+                          <option key={s.id} value={s.name}>{s.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-zinc-300">3. Bingkai & Tata Letak Video</label>
+                      <select 
+                        value={selectedFrameStyle}
+                        onChange={(e) => setSelectedFrameStyle(e.target.value)}
+                        className="w-full p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                      >
+                        {frameStylesList.map((f) => (
+                          <option key={f.id} value={f.name}>{f.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="space-y-2 pt-2 border-t border-zinc-800">
+                      <label className="block text-xs font-bold text-zinc-300">4. Terjemahan Bahasa Subtitle (AI Translate)</label>
+                      <select 
+                        value={targetLang}
+                        onChange={(e) => setTargetLang(e.target.value)}
+                        className="w-full p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                      >
+                        <option value="Indonesia">🇮🇩 Bahasa Indonesia</option>
+                        <option value="English">🇺🇸 Bahasa Inggris</option>
+                        <option value="Arab">🇸🇦 Bahasa Arab</option>
+                        <option value="Jepang">🇯🇵 Bahasa Jepang</option>
+                        <option value="Korea">🇰🇷 Bahasa Korea</option>
+                      </select>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* Bagian Paket & Pembayaran BCA */}
+        {(activeMenu === 'harga' || activeMenu === 'beranda') && !videoId && (
+          <div className="mt-16 space-y-8 pt-10 border-t border-zinc-900">
+            <div>
+              <h3 className="text-base font-bold mb-1 text-zinc-200">Paket Langganan 500+ Templat AI</h3>
+              <p className="text-xs text-zinc-400">Buka akses penuh tanpa batas untuk seluruh koleksi templat viral dan unduhan.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {Object.keys(planDetails).map((plan) => (
+                <div 
+                  key={plan}
+                  onClick={() => setSelectedPlan(plan)}
+                  className={`cursor-pointer p-6 rounded-3xl border transition-all ${
+                    selectedPlan === plan ? 'bg-[#18221e] border-emerald-500' : 'bg-[#111614]/80 border-zinc-800'
+                  }`}
+                >
+                  <h4 className="text-xs font-extrabold uppercase text-emerald-400 mb-2">{plan}</h4>
+                  <p className="text-2xl font-black my-2 text-white">{planDetails[plan].price}</p>
+                  <p className="text-xs text-zinc-400 mb-6">{planDetails[plan].clips}</p>
+                  <button className={`w-full py-2.5 rounded-xl text-xs font-bold ${selectedPlan === plan ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-300'}`}>
+                    {selectedPlan === plan ? 'Paket Dipilih' : 'Pilih Paket'}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-[#111614] border border-zinc-800 p-8 rounded-3xl text-center max-w-xl mx-auto">
+              <h4 className="text-sm font-bold mb-1 text-zinc-200">Konfirmasi Pembayaran Paket {selectedPlan}</h4>
+              <p className="text-xs text-zinc-400">Transfer sebesar <span className="text-white font-extrabold">{planDetails[selectedPlan].price}</span> ke:</p>
+              <p className="text-xl font-black text-emerald-400 my-3">BCA: 753-609-2721</p>
+              <p className="text-xs text-zinc-400 mb-6">a.n. <span className="text-white font-bold">THANTHAWI</span></p>
+              
+              <form onSubmit={handleUploadReceipt} className="space-y-3">
+                <input 
+                  type="file" 
+                  onChange={(e) => setReceiptFile(e.target.files[0])}
+                  className="w-full text-xs text-zinc-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-black cursor-pointer bg-zinc-900 border border-zinc-800 rounded-xl p-1.5"
+                />
+                <button type="submit" className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-xl transition">
+                  Kirim Bukti Struk Transfer
+                </button>
+              </form>
+              {uploadStatus && <p className="mt-3 text-emerald-400 text-xs font-semibold">{uploadStatus}</p>}
+            </div>
+          </div>
+        )}
+
+      </main>
+    </div>
+  );
+}
+
+export default App;
