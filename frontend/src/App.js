@@ -5,6 +5,17 @@ function App() {
   const [selectedPlan, setSelectedPlan] = useState('Standart');
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [adminEmail, setAdminEmail] = useState('');
+  const [receiptFile, setReceiptFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
+
+  // Harga dan Detail Paket
+  const planDetails = {
+    Standart: { price: 'Rp 30.000', clips: '10 Klip Viral' },
+    Pro: { price: 'Rp 100.000', clips: '50 Klip Viral + Auto Post' },
+    Golden: { price: 'Rp 250.000', clips: '100 Klip + Prioritas Server' }
+  };
 
   const handleProcess = (e) => {
     e.preventDefault();
@@ -15,20 +26,62 @@ function App() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setSuccessMsg('Video berhasil diproses! Silakan lakukan pembayaran untuk mengunduh klip.');
-    }, 2000);
+      setSuccessMsg('Video berhasil diproses! Silakan pilih paket dan lakukan pembayaran.');
+    }, 1500);
+  };
+
+  const handleUploadReceipt = (e) => {
+    e.preventDefault();
+    if (!receiptFile) {
+      alert('Pilih file struk terlebih dahulu!');
+      return;
+    }
+    setUploadStatus('Struk berhasil diunggah! Menunggu verifikasi admin (tawitan144@gmail.com).');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="text-center mb-10">
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-            AI Video Clipper SaaS
-          </h1>
-          <p className="text-gray-400 mt-2">Ubah video panjang YouTube menjadi ratusan klip viral otomatis dengan AI.</p>
+        
+        {/* Header & Tombol Admin */}
+        <header className="flex justify-between items-center mb-10">
+          <div>
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+              AI Video Clipper SaaS
+            </h1>
+            <p className="text-gray-400 text-sm mt-1">Ubah video panjang YouTube jadi klip viral otomatis.</p>
+          </div>
+          <button 
+            onClick={() => setIsAdminOpen(!isAdminOpen)}
+            className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-semibold rounded-lg border border-gray-700 transition"
+          >
+            {isAdminOpen ? 'Tutup Admin' : '🔑 Login Admin'}
+          </button>
         </header>
+
+        {/* Panel Login Admin */}
+        {isAdminOpen && (
+          <div className="bg-gray-900 border border-purple-500/50 p-5 rounded-2xl mb-8 shadow-lg">
+            <h3 className="text-md font-bold text-purple-400 mb-2">Panel Admin Verifikasi</h3>
+            <p className="text-xs text-gray-400 mb-3">Login khusus pengelola: tawitan144@gmail.com</p>
+            <div className="space-y-3">
+              <input 
+                type="email" 
+                placeholder="Masukkan email admin..."
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white"
+              />
+              {adminEmail === 'tawitan144@gmail.com' ? (
+                <div className="p-3 bg-purple-950/40 border border-purple-800 rounded-lg text-xs text-purple-300">
+                  ✅ Akses Admin Diterima! Daftar pengguna yang mengunggah struk BCA akan muncul di sini.
+                </div>
+              ) : (
+                <p className="text-xs text-gray-500">Masukkan email yang benar untuk membuka panel kontrol.</p>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Input URL Section */}
         <div className="bg-gray-900/80 border border-gray-800 p-6 rounded-2xl shadow-xl backdrop-blur-md mb-8">
@@ -40,51 +93,79 @@ function App() {
                 placeholder="https://www.youtube.com/watch?v=..."
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none text-white"
+                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none text-white text-sm"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200 text-sm"
             >
               {loading ? 'Memproses AI Clipper...' : 'Mulai Potong Video (AI)'}
             </button>
           </form>
-          {successMsg && <p className="mt-4 text-green-400 text-center font-medium">{successMsg}</p>}
+          {successMsg && <p className="mt-4 text-green-400 text-center text-sm font-medium">{successMsg}</p>}
         </div>
 
-        {/* Pricing / Credit Plans */}
+        {/* Pricing / Credit Plans (Sekarang Bisa Diklik) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-            <h3 className="text-lg font-bold text-purple-400">Standart</h3>
-            <p className="text-2xl font-extrabold my-2">Rp 30.000</p>
-            <p className="text-sm text-gray-400 mb-4">10 Klip Viral + Auto Subtitle</p>
-            <button onClick={() => setSelectedPlan('Standart')} className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium">Pilih Paket</button>
-          </div>
-          <div className="bg-gray-900 border-2 border-purple-500 p-6 rounded-2xl relative shadow-purple-900/20 shadow-xl">
-            <span className="absolute -top-3 right-4 bg-purple-600 text-xs px-2 py-1 rounded-full font-bold">TERPOPULER</span>
-            <h3 className="text-lg font-bold text-purple-400">Pro</h3>
-            <p className="text-2xl font-extrabold my-2">Rp 100.000</p>
-            <p className="text-sm text-gray-400 mb-4">50 Klip Viral + Auto Post</p>
-            <button onClick={() => setSelectedPlan('Pro')} className="w-full py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-medium">Pilih Paket</button>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-            <h3 className="text-lg font-bold text-purple-400">Golden</h3>
-            <p className="text-2xl font-extrabold my-2">Rp 250.000</p>
-            <p className="text-sm text-gray-400 mb-4">100 Klip + Prioritas Server</p>
-            <button onClick={() => setSelectedPlan('Golden')} className="w-full py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium">Pilih Paket</button>
-          </div>
+          {Object.keys(planDetails).map((plan) => (
+            <div 
+              key={plan}
+              onClick={() => setSelectedPlan(plan)}
+              className={`cursor-pointer p-6 rounded-2xl border transition-all duration-200 ${
+                selectedPlan === plan 
+                  ? 'bg-gray-900 border-purple-500 shadow-purple-900/30 shadow-xl scale-[1.02]' 
+                  : 'bg-gray-900/60 border-gray-800 hover:border-gray-700'
+              }`}
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-bold text-purple-400">{plan}</h3>
+                {selectedPlan === plan && <span className="bg-purple-600 text-[10px] px-2 py-0.5 rounded-full font-bold">DIPILIH</span>}
+              </div>
+              <p className="text-2xl font-extrabold my-2">{planDetails[plan].price}</p>
+              <p className="text-xs text-gray-400 mb-4">{planDetails[plan].clips}</p>
+              <button className={`w-full py-2 rounded-lg text-xs font-semibold ${selectedPlan === plan ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'}`}>
+                {selectedPlan === plan ? 'Paket Aktif' : 'Pilih Paket'}
+              </button>
+            </div>
+          ))}
         </div>
 
-        {/* Payment Info (BCA) */}
-        <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl text-center">
-          <h4 className="text-md font-semibold text-gray-200 mb-2">Informasi Pembayaran BCA</h4>
-          <p className="text-sm text-gray-400">Silakan transfer sesuai paket ({selectedPlan}) ke rekening:</p>
+        {/* Payment Info & Upload Struk BCA */}
+        <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl text-center mb-8">
+          <h4 className="text-md font-semibold text-gray-200 mb-2">Pembayaran Paket {selectedPlan}</h4>
+          <p className="text-xs text-gray-400">Silakan transfer sebesar <span className="text-white font-bold">{planDetails[selectedPlan].price}</span> ke rekening:</p>
           <p className="text-xl font-bold text-purple-400 my-2">BCA: 753-609-2721</p>
-          <p className="text-sm text-gray-400">a.n. <span className="text-white font-semibold">THANTHAWI</span></p>
-          <p className="text-xs text-red-400 mt-3">*Kebijakan: Layanan bersifat non-refund setelah diproses.</p>
+          <p className="text-xs text-gray-400 mb-4">a.n. <span className="text-white font-semibold">THANTHAWI</span></p>
+          
+          {/* Simulasi Barcode / QRIS */}
+          <div className="inline-block bg-white p-3 rounded-xl mb-4 shadow">
+            <div className="w-28 h-28 bg-gray-900 flex items-center justify-center text-[10px] text-white text-center p-2 rounded">
+              [BARCODE QRIS / BCA]
+            </div>
+          </div>
+
+          {/* Form Upload Struk */}
+          <form onSubmit={handleUploadReceipt} className="max-w-md mx-auto mt-2 space-y-3">
+            <div className="text-left">
+              <label className="block text-xs font-medium text-gray-300 mb-1">Unggah Struk Bukti Transfer:</label>
+              <input 
+                type="file" 
+                onChange={(e) => setReceiptFile(e.target.files[0])}
+                className="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer bg-gray-800 rounded-xl p-1"
+              />
+            </div>
+            <button 
+              type="submit"
+              className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-xs font-bold rounded-xl transition shadow"
+            >
+              Kirim Bukti Pembayaran
+            </button>
+          </form>
+          {uploadStatus && <p className="mt-3 text-green-400 text-xs font-medium">{uploadStatus}</p>}
         </div>
+
       </div>
     </div>
   );
