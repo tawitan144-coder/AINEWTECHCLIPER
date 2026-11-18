@@ -290,4 +290,13 @@ function App() {
                     value={hookText}
                     onChange={(e) => setHookText(e.target.value)}
                     placeholder="Ubah Teks Hook..."
-                    className="w-full p-2.5 bg-zinc-900 border border-zinc-70
+                    className="w-full p-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-xs text-white focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-zinc-300">2. Pilih Gaya Subtitle Otomatis</label>
+                  <select 
+                    value={selectedSubtitleStyle}
+                    onChange={(e) => setSelectedSubtitleStyle(e.target.value)}
+                    className
