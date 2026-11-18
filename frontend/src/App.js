@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
 function App() {
+  const [activeMenu, setActiveMenu] = useState('beranda');
   const [url, setUrl] = useState('');
+  const [selectedTool, setSelectedTool] = useState('Pemotongan AI');
   const [selectedPlan, setSelectedPlan] = useState('Standart');
-  const [subtitleStyle, setSubtitleStyle] = useState('Modern (Kuning/Hitam)');
-  const [hookStyle, setHookStyle] = useState('Emosional / Pertanyaan');
-  const [clipDuration, setClipDuration] = useState('30 Detik');
-  
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [clips, setClips] = useState([]);
@@ -22,10 +20,18 @@ function App() {
     Golden: { price: 'Rp 250.000', clips: '100 Klip + Prioritas Server' }
   };
 
+  const toolsList = [
+    { name: 'Pemotongan AI', desc: 'Ubah video panjang menjadi klip siap dibagikan.' },
+    { name: 'Subtitle AI', desc: 'Buat teks takarir otomatis bergaya modern.' },
+    { name: 'Peningkatan Video', desc: 'Pertajam resolusi video menjadi HD/4K.' },
+    { name: 'AI Bingkai Ulang', desc: 'Sesuaikan aspek rasio vertikal atau horisontal.' },
+    { name: 'Thumbnail AI', desc: 'Buat sampul gambar menarik secara otomatis.' }
+  ];
+
   const handleProcess = (e) => {
     e.preventDefault();
     if (!url) {
-      alert('Masukkan link YouTube terlebih dahulu!');
+      alert('Masukkan tautan video atau unggah video terlebih dahulu!');
       return;
     }
     setLoading(true);
@@ -34,11 +40,11 @@ function App() {
 
     setTimeout(() => {
       setLoading(false);
-      setSuccessMsg(`AI berhasil memotong video menggunakan Hook "${hookStyle}" & Subtitle "${subtitleStyle}"!`);
+      setSuccessMsg(`Berhasil memproses menggunakan alat "${selectedTool}"!`);
       setClips([
-        { id: 1, title: 'Klip 1: Poin Utama & Hook Kuat', duration: clipDuration },
-        { id: 2, title: 'Klip 2: Pembahasan Menarik', duration: clipDuration },
-        { id: 3, title: 'Klip 3: Kesimpulan & Call to Action', duration: clipDuration }
+        { id: 1, title: 'Klip Viral 1: Poin Utama (00:15 - 00:45)', duration: '30s' },
+        { id: 2, title: 'Klip Viral 2: Momen Menarik (01:20 - 02:00)', duration: '40s' },
+        { id: 3, title: 'Klip Viral 3: Kesimpulan (03:10 - 03:50)', duration: '40s' }
       ]);
     }, 2000);
   };
@@ -53,216 +59,225 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-black text-white flex flex-col md:flex-row">
+      
+      {/* Sidebar Navigasi Kiri */}
+      <aside className="w-full md:w-64 bg-zinc-950 border-r border-zinc-800 p-4 flex flex-row md:flex-col justify-between">
+        <div>
+          <div className="flex items-center space-x-2 mb-8 px-2">
+            <div className="w-7 h-7 bg-green-500 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div>
+            <span className="font-bold text-lg bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+              AI VideoStudio
+            </span>
+          </div>
+
+          <nav className="space-y-1 flex md:block overflow-x-auto space-x-2 md:space-x-0">
+            {[
+              { id: 'beranda', label: 'Beranda', icon: '🏠' },
+              { id: 'alat', label: 'Alat AI', icon: '⚡' },
+              { id: 'harga', label: 'Harga & Paket', icon: '💎' },
+              { id: 'admin', label: 'Panel Admin', icon: '🔑' },
+            ].map((menu) => (
+              <button
+                key={menu.id}
+                onClick={() => {
+                  setActiveMenu(menu.id);
+                  if (menu.id === 'admin') setIsAdminOpen(true);
+                }}
+                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
+                  activeMenu === menu.id ? 'bg-zinc-800 text-green-400' : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+                }`}
+              >
+                <span>{menu.icon}</span>
+                <span className="hidden md:inline">{menu.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        <div className="hidden md:block pt-4 border-t border-zinc-800 text-xs text-zinc-500">
+          <p>Logged as:</p>
+          <p className="text-zinc-300 font-semibold truncate">THANTHAWI</p>
+        </div>
+      </aside>
+
+      {/* Konten Utama Kanan */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto">
         
-        {/* Header & Tombol Admin */}
-        <header className="flex justify-between items-center mb-10">
+        {/* Top Bar */}
+        <div className="flex justify-between items-center mb-8 bg-zinc-900/60 border border-zinc-800 p-4 rounded-2xl">
           <div>
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-              AI Video Clipper SaaS Pro
-            </h1>
-            <p className="text-gray-400 text-sm mt-1">Platform Otomasi Klip Viral dengan Kustomisasi AI.</p>
+            <h1 className="text-lg md:text-xl font-bold capitalize">{activeMenu === 'alat' ? 'Pilih Alat AI' : activeMenu}</h1>
+            <p className="text-xs text-zinc-400">Platform otomatisasi video berbasis kecerdasan buatan.</p>
           </div>
           <button 
             onClick={() => setIsAdminOpen(!isAdminOpen)}
-            className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-semibold rounded-lg border border-gray-700 transition"
+            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold rounded-lg border border-zinc-700 transition"
           >
-            {isAdminOpen ? 'Tutup Admin' : '🔑 Login Admin'}
+            {isAdminOpen ? 'Tutup Admin' : '🔑 Admin BCA'}
           </button>
-        </header>
+        </div>
 
-        {/* Panel Login Admin */}
+        {/* Panel Admin Verifikasi */}
         {isAdminOpen && (
-          <div className="bg-gray-900 border border-purple-500/50 p-5 rounded-2xl mb-8 shadow-lg">
-            <h3 className="text-md font-bold text-purple-400 mb-2">Panel Admin Verifikasi</h3>
-            <p className="text-xs text-gray-400 mb-3">Login khusus pengelola: tawitan144@gmail.com</p>
+          <div className="bg-zinc-900 border border-green-500/50 p-5 rounded-2xl mb-8 shadow-lg">
+            <h3 className="text-md font-bold text-green-400 mb-2">Panel Admin Verifikasi (BCA)</h3>
+            <p className="text-xs text-zinc-400 mb-3">Login khusus pengelola: tawitan144@gmail.com</p>
             <div className="space-y-3">
               <input 
                 type="email" 
                 placeholder="Masukkan email admin..."
                 value={adminEmail}
                 onChange={(e) => setAdminEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white"
+                className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white"
               />
               {adminEmail === 'tawitan144@gmail.com' ? (
-                <div className="p-3 bg-purple-950/40 border border-purple-800 rounded-lg text-xs text-purple-300">
-                  ✅ Akses Admin Diterima! Daftar pengguna yang mengunggah struk BCA aktif.
+                <div className="p-3 bg-green-950/40 border border-green-800 rounded-lg text-xs text-green-300">
+                  ✅ Akses Admin Diterima! Daftar struk pembayaran BCA pelanggan aktif.
                 </div>
               ) : (
-                <p className="text-xs text-gray-500">Masukkan email yang benar untuk membuka panel kontrol.</p>
+                <p className="text-xs text-zinc-500">Masukkan email yang benar untuk membuka kontrol.</p>
               )}
             </div>
           </div>
         )}
 
-        {/* Input URL & Tool Clipper Lengkap */}
-        <div className="bg-gray-900/80 border border-gray-800 p-6 rounded-2xl shadow-xl backdrop-blur-md mb-8 space-y-4">
-          <form onSubmit={handleProcess} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Link Video YouTube</label>
-              <input
-                type="text"
-                placeholder="https://www.youtube.com/watch?v=..."
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:outline-none text-white text-sm"
-              />
-            </div>
-
-            {/* Pilihan Tool Clipper & Kustomisasi AI */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Pilih Gaya Hook</label>
-                <select 
-                  value={hookStyle} 
-                  onChange={(e) => setHookStyle(e.target.value)}
-                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
-                >
-                  <option>Emosional / Pertanyaan</option>
-                  <option>Fakta Mengejutkan</option>
-                  <option>Kontroversial / Debat</option>
-                  <option>Edukasi Langsung</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Gaya Subtitle AI</label>
-                <select 
-                  value={subtitleStyle} 
-                  onChange={(e) => setSubtitleStyle(e.target.value)}
-                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
-                >
-                  <option>Modern (Kuning/Hitam - Alex Hormozi)</option>
-                  <option>Minimalis Clean (Putih)</option>
-                  <option>Neon Glow (Ungu/Pink)</option>
-                  <option>Netflix Style</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Durasi Target Klip</label>
-                <select 
-                  value={clipDuration} 
-                  onChange={(e) => setClipDuration(e.target.value)}
-                  className="w-full p-2.5 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white"
-                >
-                  <option>30 Detik (Shorts/Reels)</option>
-                  <option>60 Detik (TikTok/IG)</option>
-                  <option>90 Detik (Deep Dive)</option>
-                </select>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200 text-sm mt-4"
-            >
-              {loading ? 'AI Sedang Menganalisis & Meracik Klip...' : '🚀 Mulai Potong Video dengan AI'}
-            </button>
-          </form>
-          {successMsg && <p className="mt-2 text-green-400 text-center text-xs font-medium">{successMsg}</p>}
-        </div>
-
-        {/* Hasil Klip & Pemutar Video (Video Player Preview) */}
-        {clips.length > 0 && (
-          <div className="bg-gray-900 border border-purple-500/40 p-6 rounded-2xl mb-8 shadow-xl space-y-6">
-            <h3 className="text-lg font-bold text-purple-400">🎬 Hasil Klip AI & Pemutar Pratinjau</h3>
+        {/* Menu Beranda / Alat Utama */}
+        {(activeMenu === 'beranda' || activeMenu === 'alat') && (
+          <div className="space-y-8">
             
-            {/* Simulasi Video Player dengan Subtitle & Hook */}
-            <div className="relative w-full aspect-[9/16] md:aspect-video bg-black rounded-xl overflow-hidden border border-gray-800 flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 flex flex-col justify-between p-4">
-                <span className="bg-purple-600/80 text-white text-[10px] px-2.5 py-1 rounded-full w-max font-bold">
-                  Hook: {hookStyle}
+            {/* Banner Utama ala WayinVideo */}
+            <div className="bg-gradient-to-r from-zinc-900 via-zinc-900 to-zinc-950 border border-zinc-800 p-6 md:p-8 rounded-2xl relative overflow-hidden shadow-xl">
+              <div className="max-w-xl">
+                <span className="bg-green-500/20 text-green-400 text-xs px-2.5 py-1 rounded-full font-bold border border-green-500/30">
+                  {selectedTool}
                 </span>
-                <div className="text-center mb-6">
-                  <span className="bg-black/70 text-yellow-300 px-3 py-1.5 rounded-lg text-sm md:text-lg font-extrabold tracking-wide shadow-lg border border-yellow-500/30">
-                    ✨ [Teks Subtitle Bergaya "{subtitleStyle}"]
-                  </span>
+                <h2 className="text-2xl md:text-3xl font-extrabold mt-3 mb-2">Ubah video panjang menjadi klip siap dibagikan.</h2>
+                <p className="text-xs md:text-sm text-zinc-400 mb-6">Tempel tautan YouTube atau unggah file video Anda untuk mulai diproses secara instan oleh AI.</p>
+              </div>
+
+              {/* Input Kotak Utama */}
+              <form onSubmit={handleProcess} className="bg-zinc-950/90 border border-zinc-700 p-2 rounded-2xl flex flex-col md:flex-row items-center gap-2 shadow-2xl">
+                <input
+                  type="text"
+                  placeholder="Tempel tautan video YouTube atau unggah video..."
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  className="w-full px-4 py-3 bg-transparent focus:outline-none text-sm text-white placeholder-zinc-500"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full md:w-auto px-6 py-3 bg-green-600 hover:bg-green-500 font-bold rounded-xl transition text-sm whitespace-nowrap"
+                >
+                  {loading ? 'Memproses...' : 'Mulai →'}
+                </button>
+              </form>
+              {successMsg && <p className="mt-3 text-green-400 text-xs font-medium">{successMsg}</p>}
+            </div>
+
+            {/* Pilihan Alat AI (Grid Menu seperti di Gambar) */}
+            <div>
+              <h3 className="text-sm font-bold text-zinc-300 mb-4">Pilih Alat AI Lainnya</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {toolsList.map((tool) => (
+                  <div
+                    key={tool.name}
+                    onClick={() => setSelectedTool(tool.name)}
+                    className={`cursor-pointer p-4 rounded-xl border transition-all ${
+                      selectedTool === tool.name 
+                        ? 'bg-zinc-800 border-green-500 shadow-lg shadow-green-900/20' 
+                        : 'bg-zinc-900/40 border-zinc-800 hover:border-zinc-700'
+                    }`}
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center mb-3 text-sm">⚡</div>
+                    <h4 className="text-xs font-bold text-white mb-1">{tool.name}</h4>
+                    <p className="text-[10px] text-zinc-400 line-clamp-2">{tool.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Hasil Klip AI */}
+            {clips.length > 0 && (
+              <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl space-y-4">
+                <h3 className="text-md font-bold text-green-400">🎬 Hasil Klip AI (Siap Unduh)</h3>
+                <div className="space-y-3">
+                  {clips.map((clip) => (
+                    <div key={clip.id} className="flex justify-between items-center bg-zinc-800/80 p-4 rounded-xl border border-zinc-700">
+                      <div>
+                        <h4 className="text-xs font-semibold text-white">{clip.title}</h4>
+                        <p className="text-[10px] text-zinc-400">Durasi: {clip.duration}</p>
+                      </div>
+                      <button 
+                        onClick={() => alert('Selesaikan pembayaran paket untuk mengunduh!')}
+                        className="px-3 py-1.5 bg-green-600 hover:bg-green-500 text-xs font-bold rounded-lg transition"
+                      >
+                        Unduh
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <p className="text-gray-500 text-xs">Pratinjau Video Vertikal / Horisontal AI Clipper</p>
+            )}
+          </div>
+        )}
+
+        {/* Menu Harga & Pembayaran BCA */}
+        {(activeMenu === 'harga' || activeMenu === 'beranda') && (
+          <div className="mt-12 space-y-8 pt-8 border-t border-zinc-800">
+            <div>
+              <h3 className="text-lg font-bold mb-1">Paket & Langganan AI</h3>
+              <p className="text-xs text-zinc-400">Pilih paket terbaik untuk kebutuhan konten kreator Anda.</p>
             </div>
 
-            {/* Daftar Klip Siap Unduh */}
-            <div className="space-y-3">
-              {clips.map((clip) => (
-                <div key={clip.id} className="flex justify-between items-center bg-gray-800/80 p-4 rounded-xl border border-gray-700">
-                  <div>
-                    <h4 className="text-sm font-semibold text-white">{clip.title}</h4>
-                    <p className="text-xs text-gray-400">Durasi: {clip.duration} • Subtitle & Hook Diterapkan</p>
-                  </div>
-                  <button 
-                    onClick={() => alert('Selesaikan pembayaran paket di bawah untuk mengunduh seluruh klip tanpa watermark!')}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-xs font-bold rounded-lg transition"
-                  >
-                    Unduh Klip
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {Object.keys(planDetails).map((plan) => (
+                <div 
+                  key={plan}
+                  onClick={() => setSelectedPlan(plan)}
+                  className={`cursor-pointer p-6 rounded-2xl border transition-all ${
+                    selectedPlan === plan 
+                      ? 'bg-zinc-900 border-green-500 shadow-xl' 
+                      : 'bg-zinc-900/40 border-zinc-800 hover:border-zinc-700'
+                  }`}
+                >
+                  <h4 className="text-sm font-bold text-green-400 mb-1">{plan}</h4>
+                  <p className="text-xl font-extrabold my-2">{planDetails[plan].price}</p>
+                  <p className="text-xs text-zinc-400 mb-4">{planDetails[plan].clips}</p>
+                  <button className={`w-full py-2 rounded-lg text-xs font-semibold ${selectedPlan === plan ? 'bg-green-600 text-white' : 'bg-zinc-800 text-zinc-300'}`}>
+                    {selectedPlan === plan ? 'Paket Dipilih' : 'Pilih Paket'}
                   </button>
                 </div>
               ))}
             </div>
+
+            {/* Kotak Pembayaran BCA a.n THANTHAWI */}
+            <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl text-center max-w-xl mx-auto">
+              <h4 className="text-sm font-semibold mb-1">Konfirmasi Pembayaran Paket {selectedPlan}</h4>
+              <p className="text-xs text-zinc-400">Transfer sebesar <span className="text-white font-bold">{planDetails[selectedPlan].price}</span> ke rekening:</p>
+              <p className="text-lg font-bold text-green-400 my-2">BCA: 753-609-2721</p>
+              <p className="text-xs text-zinc-400 mb-4">a.n. <span className="text-white font-semibold">THANTHAWI</span></p>
+              
+              <form onSubmit={handleUploadReceipt} className="space-y-3">
+                <input 
+                  type="file" 
+                  onChange={(e) => setReceiptFile(e.target.files[0])}
+                  className="w-full text-xs text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-green-600 file:text-white cursor-pointer bg-zinc-800 rounded-xl p-1"
+                />
+                <button 
+                  type="submit"
+                  className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-xs font-bold rounded-xl transition"
+                >
+                  Kirim Bukti Struk Transfer
+                </button>
+              </form>
+              {uploadStatus && <p className="mt-3 text-green-400 text-xs font-medium">{uploadStatus}</p>}
+            </div>
           </div>
         )}
 
-        {/* Pricing / Credit Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {Object.keys(planDetails).map((plan) => (
-            <div 
-              key={plan}
-              onClick={() => setSelectedPlan(plan)}
-              className={`cursor-pointer p-6 rounded-2xl border transition-all duration-200 ${
-                selectedPlan === plan 
-                  ? 'bg-gray-900 border-purple-500 shadow-purple-900/30 shadow-xl scale-[1.02]' 
-                  : 'bg-gray-900/60 border-gray-800 hover:border-gray-700'
-              }`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-bold text-purple-400">{plan}</h3>
-                {selectedPlan === plan && <span className="bg-purple-600 text-[10px] px-2 py-0.5 rounded-full font-bold">DIPILIH</span>}
-              </div>
-              <p className="text-2xl font-extrabold my-2">{planDetails[plan].price}</p>
-              <p className="text-xs text-gray-400 mb-4">{planDetails[plan].clips}</p>
-              <button className={`w-full py-2 rounded-lg text-xs font-semibold ${selectedPlan === plan ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'}`}>
-                {selectedPlan === plan ? 'Paket Aktif' : 'Pilih Paket'}
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Payment Info & Upload Struk BCA */}
-        <div className="bg-gray-900 border border-gray-800 p-6 rounded-2xl text-center mb-8">
-          <h4 className="text-md font-semibold text-gray-200 mb-2">Pembayaran Paket {selectedPlan}</h4>
-          <p className="text-xs text-gray-400">Silakan transfer sebesar <span className="text-white font-bold">{planDetails[selectedPlan].price}</span> ke rekening:</p>
-          <p className="text-xl font-bold text-purple-400 my-2">BCA: 753-609-2721</p>
-          <p className="text-xs text-gray-400 mb-4">a.n. <span className="text-white font-semibold">THANTHAWI</span></p>
-          
-          <div className="inline-block bg-white p-3 rounded-xl mb-4 shadow">
-            <div className="w-28 h-28 bg-gray-900 flex items-center justify-center text-[10px] text-white text-center p-2 rounded">
-              [BARCODE QRIS / BCA]
-            </div>
-          </div>
-
-          <form onSubmit={handleUploadReceipt} className="max-w-md mx-auto mt-2 space-y-3">
-            <div className="text-left">
-              <label className="block text-xs font-medium text-gray-300 mb-1">Unggah Struk Bukti Transfer:</label>
-              <input 
-                type="file" 
-                onChange={(e) => setReceiptFile(e.target.files[0])}
-                className="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer bg-gray-800 rounded-xl p-1"
-              />
-            </div>
-            <button 
-              type="submit"
-              className="w-full py-2.5 bg-green-600 hover:bg-green-500 text-xs font-bold rounded-xl transition shadow"
-            >
-              Kirim Bukti Pembayaran
-            </button>
-          </form>
-          {uploadStatus && <p className="mt-3 text-green-400 text-xs font-medium">{uploadStatus}</p>}
-        </div>
-
-      </div>
+      </main>
     </div>
   );
 }
