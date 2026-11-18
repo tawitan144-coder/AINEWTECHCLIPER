@@ -357,4 +357,94 @@ function App() {
                       
                       <div className="relative w-full aspect-video bg-black">
                         <iframe
-                          
+                          className="w-full h-full"
+                          src={`https://www.youtube.com/embed/${videoId}?start=${clip.start}&end=${clip.end}&controls=1`}
+                          title={clip.title}
+                          frameBorder="0"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        ></iframe>
+                        <span className="absolute top-2 right-2 bg-emerald-500 text-black text-[10px] font-black px-2 py-0.5 rounded-full shadow">
+                          {clip.score}
+                        </span>
+                      </div>
+
+                      <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                          <h4 className="text-xs font-bold text-white line-clamp-1">{clip.title}</h4>
+                          <p className="text-[11px] text-zinc-400 mt-1">
+                            Potongan: Detik ke-{clip.start} s/d {clip.end} ({clip.duration})
+                          </p>
+                        </div>
+
+                        <button 
+                          onClick={() => openEditor(clip)}
+                          className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-extrabold rounded-xl transition shadow flex items-center justify-center gap-1.5"
+                        >
+                          🎨 Edit Klip Ini
+                        </button>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* Bagian Paket & Pembayaran BCA */}
+        {!editingClip && (activeMenu === 'harga' || activeMenu === 'beranda') && (
+          <div className="mt-16 space-y-8 pt-10 border-t border-zinc-900">
+            <div>
+              <h3 className="text-base font-bold mb-1 text-zinc-200">Paket Langganan</h3>
+              <p className="text-xs text-zinc-400">Untuk pengguna umum yang ingin mengunduh hasil editan video.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {Object.keys(planDetails).map((plan) => (
+                <div 
+                  key={plan}
+                  onClick={() => setSelectedPlan(plan)}
+                  className={`cursor-pointer p-6 rounded-3xl border transition-all ${
+                    selectedPlan === plan ? 'bg-[#18221e] border-emerald-500' : 'bg-[#111614]/80 border-zinc-800'
+                  }`}
+                >
+                  <h4 className="text-xs font-extrabold uppercase text-emerald-400 mb-2">{plan}</h4>
+                  <p className="text-2xl font-black my-2 text-white">{planDetails[plan].price}</p>
+                  <p className="text-xs text-zinc-400 mb-6">{planDetails[plan].clips}</p>
+                  <button className={`w-full py-2.5 rounded-xl text-xs font-bold ${selectedPlan === plan ? 'bg-emerald-500 text-black' : 'bg-zinc-800 text-zinc-300'}`}>
+                    {selectedPlan === plan ? 'Paket Dipilih' : 'Pilih Paket'}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Konfirmasi BCA */}
+            <div className="bg-[#111614] border border-zinc-800 p-8 rounded-3xl text-center max-w-xl mx-auto">
+              <h4 className="text-sm font-bold mb-1 text-zinc-200">Konfirmasi Pembayaran Paket {selectedPlan}</h4>
+              <p className="text-xs text-zinc-400">Transfer sebesar <span className="text-white font-extrabold">{planDetails[selectedPlan].price}</span> ke:</p>
+              <p className="text-xl font-black text-emerald-400 my-3">BCA: 753-609-2721</p>
+              <p className="text-xs text-zinc-400 mb-6">a.n. <span className="text-white font-bold">THANTHAWI</span></p>
+              
+              <form onSubmit={handleUploadReceipt} className="space-y-3">
+                <input 
+                  type="file" 
+                  onChange={(e) => setReceiptFile(e.target.files[0])}
+                  className="w-full text-xs text-zinc-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-black cursor-pointer bg-zinc-900 border border-zinc-800 rounded-xl p-1.5"
+                />
+                <button type="submit" className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-xl transition">
+                  Kirim Bukti Struk Transfer
+                </button>
+              </form>
+              {uploadStatus && <p className="mt-3 text-emerald-400 text-xs font-semibold">{uploadStatus}</p>}
+            </div>
+          </div>
+        )}
+
+      </main>
+    </div>
+  );
+}
+
+export default App;
