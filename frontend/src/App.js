@@ -5,12 +5,12 @@ function App() {
   const [selectedPlan, setSelectedPlan] = useState('Standart');
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [clips, setClips] = useState([]);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
   const [receiptFile, setReceiptFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
 
-  // Harga dan Detail Paket
   const planDetails = {
     Standart: { price: 'Rp 30.000', clips: '10 Klip Viral' },
     Pro: { price: 'Rp 100.000', clips: '50 Klip Viral + Auto Post' },
@@ -24,10 +24,19 @@ function App() {
       return;
     }
     setLoading(true);
+    setSuccessMsg('');
+    setClips([]);
+
     setTimeout(() => {
       setLoading(false);
-      setSuccessMsg('Video berhasil diproses! Silakan pilih paket dan lakukan pembayaran.');
-    }, 1500);
+      setSuccessMsg('Video berhasil dianalisis oleh AI! Silakan pilih paket dan lakukan pembayaran untuk mengunduh klip.');
+      // Simulasi hasil klip video yang dihasilkan AI
+      setClips([
+        { id: 1, title: 'Klip Viral 1: Poin Utama (00:15 - 00:45)', duration: '30s' },
+        { id: 2, title: 'Klip Viral 2: Momen Menarik (01:20 - 02:00)', duration: '40s' },
+        { id: 3, title: 'Klip Viral 3: Kesimpulan (03:10 - 03:50)', duration: '40s' }
+      ]);
+    }, 2000);
   };
 
   const handleUploadReceipt = (e) => {
@@ -101,13 +110,36 @@ function App() {
               disabled={loading}
               className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-semibold rounded-xl shadow-lg transition-all duration-200 text-sm"
             >
-              {loading ? 'Memproses AI Clipper...' : 'Mulai Potong Video (AI)'}
+              {loading ? 'AI Sedang Memotong Video...' : 'Mulai Potong Video (AI)'}
             </button>
           </form>
           {successMsg && <p className="mt-4 text-green-400 text-center text-sm font-medium">{successMsg}</p>}
         </div>
 
-        {/* Pricing / Credit Plans (Sekarang Bisa Diklik) */}
+        {/* Hasil Klip AI (Akan muncul setelah diproses) */}
+        {clips.length > 0 && (
+          <div className="bg-gray-900 border border-purple-500/40 p-6 rounded-2xl mb-8 shadow-xl">
+            <h3 className="text-lg font-bold text-purple-400 mb-4">🎬 Hasil Klip AI (Siap Unduh)</h3>
+            <div className="space-y-3">
+              {clips.map((clip) => (
+                <div key={clip.id} className="flex justify-between items-center bg-gray-800/80 p-4 rounded-xl border border-gray-700">
+                  <div>
+                    <h4 className="text-sm font-semibold text-white">{clip.title}</h4>
+                    <p className="text-xs text-gray-400">Durasi: {clip.duration}</p>
+                  </div>
+                  <button 
+                    onClick={() => alert('Silakan selesaikan pembayaran paket terlebih dahulu untuk mengunduh klip tanpa watermark!')}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-xs font-bold rounded-lg transition"
+                  >
+                    Unduh Klip
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pricing / Credit Plans */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {Object.keys(planDetails).map((plan) => (
             <div 
@@ -139,14 +171,12 @@ function App() {
           <p className="text-xl font-bold text-purple-400 my-2">BCA: 753-609-2721</p>
           <p className="text-xs text-gray-400 mb-4">a.n. <span className="text-white font-semibold">THANTHAWI</span></p>
           
-          {/* Simulasi Barcode / QRIS */}
           <div className="inline-block bg-white p-3 rounded-xl mb-4 shadow">
             <div className="w-28 h-28 bg-gray-900 flex items-center justify-center text-[10px] text-white text-center p-2 rounded">
               [BARCODE QRIS / BCA]
             </div>
           </div>
 
-          {/* Form Upload Struk */}
           <form onSubmit={handleUploadReceipt} className="max-w-md mx-auto mt-2 space-y-3">
             <div className="text-left">
               <label className="block text-xs font-medium text-gray-300 mb-1">Unggah Struk Bukti Transfer:</label>
