@@ -103,4 +103,146 @@ export default function App() {
     );
   }
 
-  // ===== HALAMAN 3 -
+  // ===== HALAMAN 3 - STUDIO EDIT =====
+  if (page === 'studio') {
+    return wrap(
+      <div>
+        <button onClick={() => setPage('clips')} style={{ background: 'transparent', color: neon, border: `1px solid ${neon}`, padding: '7px 14px', borderRadius: 20, cursor: 'pointer', marginBottom: 12 }}>← Kembali ke 5 Clip</button>
+        <h2 style={{ fontSize: 22, margin: '4px 0' }}>Studio Edit — {picked?.title}</h2>
+        <p style={{ color: '#9ab4d6', fontSize: 13 }}>Kamu lagi edit: <b style={{ color: 'white' }}>{picked?.label} • {picked?.time}</b></p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12, marginTop: 12 }}>
+          <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, overflow: 'hidden' }}>
+            <div style={{ position: 'relative', background: '#000', height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 44 }}>🎬
+              <div style={{ position: 'absolute', bottom: 28, left: 10, right: 10, background: '#00e5ff', color: 'black', fontSize: 11, fontWeight: 700, padding: '5px 8px', borderRadius: 6 }}>Mau bikin konten viral? Pakai AI aja!</div>
+              <div style={{ position: 'absolute', bottom: 8, left: 10, right: 10, display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#ccc' }}><span>▶ ⏮ ⏭</span><span>00:12 / {picked?.time}</span><span>⛶</span></div>
+            </div>
+            <div style={{ padding: '10px 12px', fontSize: 12, color: '#9ab4d6' }}>Timeline • Split • Trim • Speed • Transisi • Musik</div>
+          </div>
+          <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, padding: 14 }}>
+            <b style={{ color: neon, fontSize: 16 }}>Panel Edit</b>
+            <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>✏️ Text</span><span style={{ color: neon }}>●○</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>💬 Auto Subtitle Indonesia</span><span style={{ color: neon }}>●○</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>🔑 Keyframe</span><span>•••••</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>🖼️ Overlay</span><span>›</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>🎭 Mask</span><span>›</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>🎨 Warna</span><span>›</span></div>
+              <button style={{ background: neon, color: 'black', border: 'none', padding: 11, borderRadius: 10, fontWeight: 900, cursor: 'pointer' }}>⬇ Download MP4 1080p</button>
+              <button onClick={() => setPage('paket')} style={{ background: 'transparent', color: neon, border: `1px solid ${neon}`, padding: 10, borderRadius: 10, cursor: 'pointer', fontWeight: 700 }}>Lihat Daftar Paket untuk Buka 4K →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== HALAMAN 4 - BRAND AMBASSADOR =====
+  if (page === 'ambassador') {
+    return wrap(
+      <div>
+        <div style={{ fontSize: 12, color: neon, fontWeight: 800 }}>04 • BRAND AMBASSADOR</div>
+        <h2 style={{ fontSize: 26, margin: '8px 0 4px' }}>Jadi Brand Ambassador & Dapatkan <span style={{ color: neon }}>200 Clip Gratis</span> Per Bulan</h2>
+        <p style={{ color: '#9ab4d6', fontSize: 14 }}>Bagikan link kamu, dapat komisi tiap orang beli. Tanpa modal, tanpa stok.</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 14, marginTop: 16 }}>
+          <div style={{ background: '#0a1230', border: `1px solid ${neon}88`, borderRadius: 14, padding: 16 }}>
+            <b style={{ color: neon }}>🎁 Link Referral Kamu</b>
+            <div style={{ background: '#020617', border: `1px solid ${neon}55`, borderRadius: 10, padding: '12px', marginTop: 10, fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>ainewtechclip.com/r/AMBASSADOR-2024 <span>📋 Salin</span></div>
+            <div style={{ fontSize: 13, color: '#9ab4d6', marginTop: 12, lineHeight: 1.7 }}>
+              <b style={{ color: 'white' }}>Cara Kerja:</b><br />
+              1. Daftar jadi Ambassador (Gratis)<br />
+              2. Bagikan link ke TikTok / IG / WhatsApp<br />
+              3. Teman klik & beli paket<br />
+              4. Kamu dapat <b style={{ color: neon }}>Komisi 5%</b> - cair tiap bulan
+            </div>
+            <div style={{ background: '#020617', borderRadius: 10, padding: 12, marginTop: 12 }}>
+              <b style={{ fontSize: 13 }}>Daftar Sekarang - Gratis</b>
+              <input value={namaRef} onChange={e => setNamaRef(e.target.value)} placeholder="Nama Lengkap Kamu" style={{ background: '#071022', color: 'white', border: `1px solid ${neon}55`, padding: 10, borderRadius: 10, width: '100%', boxSizing: 'border-box', marginTop: 8 }} />
+              <input value={waRef} onChange={e => setWaRef(e.target.value)} placeholder="Nomor WhatsApp (contoh: 0812...)" style={{ background: '#071022', color: 'white', border: `1px solid ${neon}55`, padding: 10, borderRadius: 10, width: '100%', boxSizing: 'border-box', marginTop: 8 }} />
+              <button onClick={() => alert('Berhasil daftar Ambassador! Link kamu: ainewtechclip.com/r/' + (namaRef || 'AMBASSADOR') + ' - Cek WhatsApp kamu ya!')} style={{ background: neon, color: 'black', border: 'none', width: '100%', padding: 12, borderRadius: 10, fontWeight: 900, cursor: 'pointer', marginTop: 10 }}>Daftar Brand Ambassador Sekarang →</button>
+              <div style={{ fontSize: 11, color: '#7788aa', textAlign: 'center', marginTop: 8 }}>Gratis • Tanpa dipungut biaya • Langsung dapat link</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ background: `linear-gradient(135deg, ${neon}, #00ffa3)`, color: 'black', borderRadius: 14, padding: 16, textAlign: 'center' }}>
+              <div style={{ fontSize: 32, fontWeight: 900 }}>200 Clip</div>
+              <div style={{ fontWeight: 700 }}>Gratis / Bulan</div>
+              <div style={{ fontSize: 12, marginTop: 6 }}>Khusus Ambassador aktif</div>
+            </div>
+            <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8 }}>
+              <b>Keuntungan Ambassador:</b><br />
+              ✅ Komisi 5% tanpa batas<br />
+              ✅ Dashboard Tracking Real-time<br />
+              ✅ Bonus Extra tiap 10 teman join<br />
+              ✅ Grup WhatsApp Ambassador<br />
+              ✅ Template promosi siap posting
+            </div>
+            <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, padding: 14 }}>
+              <b style={{ fontSize: 13 }}>Contoh Penghasilan:</b>
+              <div style={{ fontSize: 12, color: '#9ab4d6', marginTop: 6, lineHeight: 1.7 }}>
+                10 teman beli Rp 70.000 = Rp 700.000<br />
+                Komisi kamu 5% = <b style={{ color: neon }}>Rp 35.000</b><br />
+                100 teman beli = <b style={{ color: neon }}>Rp 350.000 / bulan</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ===== HALAMAN 5 - DAFTAR PAKET KITA =====
+  return wrap(
+    <div>
+      <div style={{ fontSize: 12, color: neon, fontWeight: 800 }}>05 • DAFTAR PAKET KITA</div>
+      <h2 style={{ fontSize: 26, margin: '8px 0 4px' }}>Pilih Paket Sesuai Kebutuhan Kamu</h2>
+      <p style={{ color: '#9ab4d6', fontSize: 14 }}>Semua paket sudah termasuk akses penuh fitur AI. Bayar sekali, langsung aktif.</p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginTop: 16 }}>
+        <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, padding: 18, textAlign: 'center' }}>
+          <span style={{ background: neon, color: 'black', fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 6 }}>GRATIS</span>
+          <div style={{ fontWeight: 900, fontSize: 22, marginTop: 12 }}>Gratis<br />2 Video</div>
+          <div style={{ fontSize: 12, color: '#9ab4d6' }}>Coba dulu, tanpa bayar</div>
+          <div style={{ fontSize: 13, textAlign: 'left', marginTop: 14, lineHeight: 1.9 }}>
+            ✓ 5 Clip AI / bulan<br />✓ Auto Subtitle Indonesia<br />✓ Export 720p<br />✓ Watermark AINEWTECHCLIP<br />✓ Durasi 15 detik - 1 menit
+          </div>
+          <button onClick={() => setPage('home')} style={{ background: 'transparent', color: 'white', border: '1px solid #333', width: '100%', padding: 11, borderRadius: 10, cursor: 'pointer', fontWeight: 700, marginTop: 14 }}>Mulai Gratis →</button>
+        </div>
+
+        <div style={{ background: `linear-gradient(180deg, ${neon}, #00ffa3)`, color: 'black', borderRadius: 14, padding: 18, textAlign: 'center', transform: 'scale(1.03)', boxShadow: `0 0 30px ${neon}55` }}>
+          <span style={{ background: '#ffaa00', color: 'black', fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 6 }}>⭐ PALING LARIS</span>
+          <div style={{ fontWeight: 900, fontSize: 22, marginTop: 12 }}>10 Clip<br />Rp 70.000 <span style={{ fontSize: 12, fontWeight: 400 }}>/bulan</span></div>
+          <div style={{ fontSize: 12 }}>Rp 7.000 / clip - Paling hemat</div>
+          <div style={{ fontSize: 13, textAlign: 'left', marginTop: 14, lineHeight: 1.9, fontWeight: 600 }}>
+            ✓ Semua fitur Gratis<br />✓ Export 1080p / 4K<br />✓ Tanpa Watermark<br />✓ Keyframe + Overlay + Mask<br />✓ Auto Subtitle + Voiceover AI<br />✓ Prioritas Proses AI Cepat
+          </div>
+          <button onClick={() => alert('Lanjut ke pembayaran QRIS - Rp 70.000 / bulan. Pilih GoPay / OVO / DANA / Transfer Bank')} style={{ background: 'black', color: 'white', width: '100%', padding: 12, borderRadius: 10, cursor: 'pointer', fontWeight: 800, marginTop: 14 }}>Bayar QRIS Sekarang →</button>
+        </div>
+
+        <div style={{ background: '#0a1230', border: `1px solid #a78bfa`, borderRadius: 14, padding: 18, textAlign: 'center' }}>
+          <span style={{ background: '#a78bfa', color: 'black', fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 6 }}>BISNIS / TIM</span>
+          <div style={{ fontWeight: 900, fontSize: 22, marginTop: 12 }}>Unlimited<br />Rp 149.000 <span style={{ fontSize: 12, fontWeight: 400 }}>/bulan</span></div>
+          <div style={{ fontSize: 12, color: '#9ab4d6' }}>Untuk tim & agensi</div>
+          <div style={{ fontSize: 13, textAlign: 'left', marginTop: 14, lineHeight: 1.9 }}>
+            ✓ Semua fitur Pro<br />✓ Unlimited Clip<br />✓ 3 Akun Tim<br />✓ Brand Kit (Logo, Warna, Font)<br />✓ Export 4K + Prioritas<br />✓ Support WhatsApp Prioritas
+          </div>
+          <button onClick={() => alert('Hubungi kami di WhatsApp untuk paket Bisnis Rp 149.000')} style={{ background: 'transparent', color: 'white', border: '1px solid #333', width: '100%', padding: 11, borderRadius: 10, cursor: 'pointer', fontWeight: 700, marginTop: 14 }}>Hubungi Kami →</button>
+        </div>
+      </div>
+
+      <div style={{ background: '#0a1230', border: `1px solid ${neon}55`, borderRadius: 14, padding: 16, marginTop: 16, textAlign: 'center' }}>
+        <b style={{ color: neon }}>Metode Pembayaran</b>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 18, marginTop: 10, flexWrap: 'wrap', fontWeight: 800, fontSize: 14 }}>
+          <span>⬛ QRIS</span><span style={{ color: '#00a8ff' }}>● gopay</span><span>🟣 OVO</span><span style={{ color: '#00a8ff' }}>● DANA</span><span>🏦 Transfer Bank</span>
+        </div>
+        <div style={{ fontSize: 11, color: '#9ab4d6', marginTop: 6 }}>Pembayaran aman • Instant • E-wallet & Transfer Bank • Garansi 7 hari uang kembali</div>
+      </div>
+
+      <div style={{ background: `linear-gradient(90deg, ${neon}22, #00ffa322)`, border: `1px solid ${neon}`, borderRadius: 14, padding: 14, marginTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+        <div><b>Belum yakin?</b> <span style={{ color: '#9ab4d6', fontSize: 13 }}>Coba Gratis dulu 2 Video, atau jadi Ambassador dapat 200 Clip Gratis.</span></div>
+        <button onClick={() => setPage('ambassador')} style={{ background: neon, color: 'black', border: 'none', padding: '10px 18px', borderRadius: 20, fontWeight: 800, cursor: 'pointer' }}>Jadi Ambassador →</button>
+      </div>
+    </div>
+  );
+}
